@@ -31,6 +31,7 @@ npm install @supabase/supabase-js @supabase/ssr
 npm install @radix-ui/react-dialog @radix-ui/react-slot
 npm install class-variance-authority clsx tailwind-merge lucide-react tw-animate-css
 npm install tailwindcss postcss autoprefixer
+npm install jsonwebtoken
 ```
 
 ## Step 3: Initialize Shadcn UI

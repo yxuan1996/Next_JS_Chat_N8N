@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server'
 import { randomUUID } from 'crypto'
 
+import jwt from 'jsonwebtoken';
+const N8N_JWT_SECRET = process.env.N8N_JWT_SECRET; // must match n8n JWT credential
+
+
 export async function POST(request) {
   try {
     const { message, sessionId, userEmail, isNewChat } = await request.json()
@@ -22,10 +26,21 @@ export async function POST(request) {
       })
     }
 
+    // Generate JWT token
+    const token = jwt.sign(
+      { sid: currentSessionId },
+      N8N_JWT_SECRET,
+      { algorithm: 'HS256', expiresIn: '5m' }
+    );
+
     // Call n8n webhook with message and sessionId
     const n8nResponse = await fetch(process.env.N8N_WEBHOOK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      
       body: JSON.stringify({
         message,
         sessionId: currentSessionId,
