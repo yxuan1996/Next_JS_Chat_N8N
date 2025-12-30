@@ -63,11 +63,12 @@ npx shadcn@canary add scroll-area
 2. Go to Project Settings > API
 3. Copy your project URL and anon public key
 
-4. In your Supabase SQL Editor, run this SQL to create the sessions table:
+4. In your Supabase SQL Editor, run this SQL to create the tables:
 
 ```sql
+
 -- Create chat_sessions table
-CREATE TABLE chat_sessions (
+CREATE TABLE n8n_chat_sessions (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_email TEXT NOT NULL,
   session_id TEXT NOT NULL,
@@ -75,7 +76,28 @@ CREATE TABLE chat_sessions (
 );
 
 -- Add index for faster queries
-CREATE INDEX idx_user_email ON chat_sessions(user_email);
+CREATE INDEX idx_user_email ON n8n_chat_sessions(user_email);
+
+-- Disable RLS for simplicity (or create policies if you prefer)
+ALTER TABLE n8n_chat_sessions DISABLE ROW LEVEL SECURITY;
+
+-- Create n8n_chat_messages table
+CREATE TABLE n8n_chat_messages (
+  id SERIAL PRIMARY KEY,
+  session_id VARCHAR(255) NOT NULL,
+  message JSONB NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Add index for faster queries
+CREATE INDEX idx_session_id ON n8n_chat_messages(session_id);
+
+-- Disable RLS for simplicity
+ALTER TABLE n8n_chat_messages DISABLE ROW LEVEL SECURITY;
+
+-- Enable Realtime for n8n_chat_messages table
+ALTER PUBLICATION supabase_realtime ADD TABLE n8n_chat_messages;
+
 ```
 
 ## Step 5: Setup Environment Variables
@@ -103,6 +125,8 @@ chat_app/
 ├── app/
 │   ├── api/
 │   │   ├── chat/
+│   │   │   └── route.js
+│   │   ├── messages/
 │   │   │   └── route.js
 │   │   └── sessions/
 │   │       └── route.js

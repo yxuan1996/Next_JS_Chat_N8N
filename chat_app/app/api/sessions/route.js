@@ -25,22 +25,17 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    console.log('xxxxxxx1')
     const { userEmail, sessionId } = await request.json()
-    console.log('xxxxxxx2')
 
     const supabase = createServerSupabaseClient()
-    console.log('xxxxxxx3')
 
     const { error } = await supabase
       .from('n8n_chat_sessions')
       .insert([
         { user_email: userEmail, session_id: sessionId }
       ])
-    
-    console.log('xxxxxxx4')
+
     if (error) throw error
-    console.log('xxxxxxx5')
 
     return NextResponse.json({ success: true })
   } catch (error) {
