@@ -19,34 +19,35 @@ export default function ChatInterface({ user, sessionId, onSessionCreated }) {
     if (sessionId) {
       loadMessages(sessionId)
       
-      // Subscribe to realtime changes
-      const channel = supabase
-        .channel('n8n_chat_messages')
-        .on(
-          'postgres_changes',
-          {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'n8n_chat_messages',
-            filter: `session_id=eq.${sessionId}`
-          },
-          (payload) => {
-            console.log('New message received:', payload)
-            // Add the new message to the list
-            const newMessage = payload.new
-            const formattedMessage = {
-              role: newMessage.message.type === 'human' ? 'user' : 'assistant',
-              content: newMessage.message.text || newMessage.message.content || '',
-            }
-            setMessages((prev) => [...prev, formattedMessage])
-          }
-        )
-        .subscribe()
+      // // Subscribe to realtime changes
+      // const channel = supabase
+      //   .channel('n8n_chat_messages')
+      //   .on(
+      //     'postgres_changes',
+      //     {
+      //       event: 'INSERT',
+      //       schema: 'public',
+      //       table: 'n8n_chat_messages',
+      //       filter: `session_id=eq.${sessionId}`
+      //     },
+      //     (payload) => {
+      //       console.log('New message received:', payload)
+      //       // Add the new message to the list
+      //       const newMessage = payload.new
+      //       const formattedMessage = {
+      //         role: newMessage.message.type === 'human' ? 'user' : 'assistant',
+      //         content: newMessage.message.text || newMessage.message.content || '',
+      //       }
+      //       // setMessages((prev) => [...prev, formattedMessage])
+      //       setMessages([formattedMessage])
+      //     }
+      //   )
+      //   .subscribe()
 
-      // Cleanup subscription on unmount or session change
-      return () => {
-        supabase.removeChannel(channel)
-      }
+      // // Cleanup subscription on unmount or session change
+      // return () => {
+      //   supabase.removeChannel(channel)
+      // }
     } else {
       // Clear messages for new chat
       setMessages([])

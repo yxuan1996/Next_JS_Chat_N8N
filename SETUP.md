@@ -108,13 +108,9 @@ Create a `.env.local` file in the root directory:
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 N8N_WEBHOOK_URL=your_n8n_webhook_url
-DATABASE_URL=postgresql://user:password@host:port/database
 ```
 
-**Note:** Get the DATABASE_URL from Supabase:
-- Go to Project Settings > Database
-- Copy the "Connection string" under "Transaction pooling"
-- Replace `[YOUR-PASSWORD]` with your database password
+
 
 ## Step 6: Project Structure
 
