@@ -16,7 +16,7 @@ export async function POST(request) {
       currentSessionId = randomUUID()
       
       // Save session to database
-      await fetch(`/api/sessions`, {
+      await fetch(`${process.env.NEXT_API_URL}/api/sessions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

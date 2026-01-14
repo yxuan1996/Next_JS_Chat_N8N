@@ -109,7 +109,13 @@ Create a `.env.local` file in the root directory:
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 N8N_WEBHOOK_URL=your_n8n_webhook_url
+N8N_JWT_SECRET=your_n8n_webhook_secret
+NEXT_API_URL=depends
 ```
+
+The NEXT_API_URL depends on your environment. 
+- When running locally use `http://127.0.0.1:3000`
+- When deployed on vercel use the vercel URL
 
 
 
